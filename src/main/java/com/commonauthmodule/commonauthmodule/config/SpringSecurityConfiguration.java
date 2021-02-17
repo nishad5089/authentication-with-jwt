@@ -1,6 +1,5 @@
 package com.commonauthmodule.commonauthmodule.config;
 
-
 import com.commonauthmodule.commonauthmodule.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,7 +49,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/helloadmin").hasRole("ADMIN")
+                .authorizeRequests().antMatchers("/helloadmin").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/register").permitAll()
                 .antMatchers("/authenticate").permitAll().anyRequest().authenticated()
                 //if any exception occurs call this

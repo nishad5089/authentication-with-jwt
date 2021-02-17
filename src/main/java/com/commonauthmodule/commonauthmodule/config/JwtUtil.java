@@ -1,6 +1,7 @@
 package com.commonauthmodule.commonauthmodule.config;
 
 import com.commonauthmodule.commonauthmodule.entity.MyUserDetails;
+import com.commonauthmodule.commonauthmodule.entity.Role;
 import com.commonauthmodule.commonauthmodule.entity.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,8 @@ public class JwtUtil {
     public String generateToken(MyUserDetails user) {
         Map<String, Object> claims = new HashMap<>();
         Collection<? extends GrantedAuthority> roles = user.getAuthorities();
-        if (roles.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        //Role roless= new Role("ADMIN");
+        if (roles.contains(new Role("ROLE_ADMIN"))) {
             claims.put("isAdmin", true);
         }
         if (roles.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
@@ -78,16 +80,16 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
-    public List<SimpleGrantedAuthority> getRolesFromToken(String authToken) {
-        List<SimpleGrantedAuthority> roles = null;
+    public List<Role> getRolesFromToken(String authToken) {
+        List<Role> roles = null;
         Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken).getBody();
         Boolean isAdmin = claims.get("isAdmin", Boolean.class);
         Boolean isUser = claims.get("isUser", Boolean.class);
         if (isAdmin != null && isAdmin == true) {
-            roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            roles = Arrays.asList(new Role("ROLE_ADMIN"));
         }
         if (isUser != null && isUser == true) {
-            roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+            roles = Arrays.asList(new Role("ROLE_USER"));
         }
         return roles;
     }
